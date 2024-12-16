@@ -3,4 +3,4 @@ const answers = [];
 const users = [];
 const categories = [];
 
-module.exports = { questions, answers, users };
+module.exports = { questions, answers, users, categories};
