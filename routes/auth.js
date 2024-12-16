@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { users } = require('../models/data');
 const User = require('../models/User');
 const router = express.Router();
+const { v4: uuidv4 } = require('uuid');
 
 const SECRET_KEY = 'secretKey';
 
@@ -14,7 +15,7 @@ router.post('/register', (req, res) => {
         return res.status(400).json({ message: 'This user is already registered' });
     }
 
-    const newUser = new User(users.length + 1, username, password, role);
+    const newUser = new User(uuidv4(), username, password, role);
     users.push(newUser);
 
     res.status(201).json({ message: 'Registered successfully', user: newUser });
