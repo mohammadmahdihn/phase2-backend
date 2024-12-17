@@ -26,7 +26,7 @@ router.get('/', authenticateToken, (req, res) => {
     res.status(200).json(filteredQuestions);
 });
 
-router.get('/', authenticateToken, authorizeRole('player'), (req, res) => {
+router.get('/random', authenticateToken, authorizeRole('player'), (req, res) => {
     if (questions.length === 0) {
         return res.status(404).json({ message: 'No questions available' });
     }
@@ -38,5 +38,18 @@ router.get('/', authenticateToken, authorizeRole('player'), (req, res) => {
     });
 });
 
+router.delete('/:id', authenticateToken, authorizeRole('designer'), (req, res) => {
+    const { id } = req.params;
+    const questionIndex = questions.findIndex(q => q.id === id);
+    if (questionIndex === -1) {
+        return res.status(404).json({ message: 'Question not found' });
+    }
+    const question = questions[questionIndex];
+    if (question.creatorId !== req.user.id) {
+        return res.status(403).json({ message: 'You are not authorized to delete this question' });
+    }
+    questions.splice(questionIndex, 1);
+    res.json({ message: 'Question successfully deleted' });
+});
 
 module.exports = router;
