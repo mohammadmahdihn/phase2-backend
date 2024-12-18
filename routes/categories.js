@@ -15,4 +15,9 @@ router.post('/', authenticateToken, authorizeRole('designer'), (req, res) => {
     res.status(201).json({ message: 'Category created!' });
 });
 
+router.get('/', authenticateToken, (req, res) => {
+    res.status(200).json({ categories });
+});
+
 module.exports = router;
+
